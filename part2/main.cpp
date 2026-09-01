@@ -23,7 +23,7 @@ int main()
         window.draw(sprite);
         sprite.move({.05f, .0f});
         
-        if (sprite.getPosition().x >= 640.f) 
+        if (sprite.getPosition().x >= 610.9f) 
         {
             sprite.setPosition({0.f, 0.f});
         }
