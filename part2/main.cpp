@@ -7,6 +7,7 @@ int main()
     texture.loadFromFile("boid-sm.png");
     sf::Sprite sprite(texture);
 
+    
     sprite.setScale({3.f, 3.f});
 
     while(window.isOpen()) 
@@ -21,11 +22,12 @@ int main()
         }
         window.clear(sf::Color::White);
         window.draw(sprite);
-        sprite.move({.05f, .0f});
+        sprite.move({0.05f, 0.0f});
         
-        if (sprite.getPosition().x >= 610.9f) 
+        // Makes sure the sprite is always on screen. Originally i hardcoded a number like 619.9f but thats actually bad practice.
+        if (sprite.getPosition().x  + sprite.getGlobalBounds().size.x >= 640.f) 
         {
-            sprite.setPosition({0.f, 0.f});
+            sprite.setPosition({0.0f, 0.0f});
         }
 
         window.display();
