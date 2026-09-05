@@ -1,5 +1,14 @@
 #include <SFML/Graphics.hpp>
 
+
+   struct MovingSprite
+    {
+        sf::Sprite sprite;
+        int pos;
+        float xMovement;
+        float yMovement;
+    };
+    
 int main()
 {
     sf::RenderWindow window(
@@ -14,34 +23,39 @@ int main()
         return 1;
     }
 
-    sf::Sprite sprite(texture);
+ 
 
-    float xMovement = 0.05f;
-    float yMovement = 0.0f;
+    MovingSprite boid{
+        sf::Sprite(texture),
+        0,
+        0.05f,
+        0.0f
+    };
+
 
     // positions:
     // 0 = right
     // 1 = down
     // 2 = left
     // 3 = up
-    int pos = 0;
+  
 
     float margin = 15.0f;
 
-    sprite.setScale({3.f, 3.f});
+    boid.sprite.setScale({3.f, 3.f});
 
-    auto bounds = sprite.getLocalBounds();
+    auto bounds = boid.sprite.getLocalBounds();
 
-    sprite.setOrigin({
+    boid.sprite.setOrigin({
         bounds.size.x / 2.f,
         bounds.size.y / 2.f
     });
 
     // Start with the entire sprite 15 pixels
     // away from the top and left edges.
-    sprite.setPosition({
-        margin + sprite.getGlobalBounds().size.x / 2.f,
-        margin + sprite.getGlobalBounds().size.y / 2.f
+    boid.sprite.setPosition({
+        margin + boid.sprite.getGlobalBounds().size.x / 2.f,
+        margin + boid.sprite.getGlobalBounds().size.y / 2.f
     });
 
     while (window.isOpen())
@@ -55,70 +69,74 @@ int main()
         }
 
         // Move using the current direction.
-        sprite.move({xMovement, yMovement});
+        boid.sprite.move({
+            boid.xMovement,
+            boid.yMovement
+        });
+
 
         // Moving RIGHT -> hit top-right corner.
         if (
-            sprite.getPosition().x +
-            sprite.getGlobalBounds().size.x / 2.f
+            boid.sprite.getPosition().x +
+            boid.sprite.getGlobalBounds().size.x / 2.f
             >= 640.f - margin
-            && pos == 0
+            && boid.pos == 0
         )
         {
-            pos = 1;
-            sprite.rotate(sf::degrees(90));
+            boid.pos = 1;
+            boid.sprite.rotate(sf::degrees(90));
 
-            xMovement = 0.0f;
-            yMovement = 0.05f;
+            boid.xMovement = 0.0f;
+            boid.yMovement = 0.05f;
         }
 
         // Moving DOWN -> hit bottom-right corner.
         if (
-            sprite.getPosition().y +
-            sprite.getGlobalBounds().size.y / 2.f
+            boid.sprite.getPosition().y +
+            boid.sprite.getGlobalBounds().size.y / 2.f
             >= 480.f - margin
-            && pos == 1
+            && boid.pos == 1
         )
         {
-            pos = 2;
-            sprite.rotate(sf::degrees(90));
+            boid.pos = 2;
+            boid.sprite.rotate(sf::degrees(90));
 
-            xMovement = -0.05f;
-            yMovement = 0.0f;
+            boid.xMovement = -0.05f;
+            boid.yMovement = 0.0f;
         }
 
         // Moving LEFT -> hit bottom-left corner.
         if (
-            sprite.getPosition().x -
-            sprite.getGlobalBounds().size.x / 2.f
+            boid.sprite.getPosition().x -
+            boid.sprite.getGlobalBounds().size.x / 2.f
             <= margin
-            && pos == 2
+            && boid.pos == 2
         )
         {
-            pos = 3;
-            sprite.rotate(sf::degrees(90));
+            boid.pos = 3;
+            boid.sprite.rotate(sf::degrees(90));
 
-            xMovement = 0.0f;
-            yMovement = -0.05f;
+            boid.xMovement = 0.0f;
+            boid.yMovement = -0.05f;
         }
 
         // Moving UP -> hit top-left corner.
         if (
-            sprite.getPosition().y -
-            sprite.getGlobalBounds().size.y / 2.f
+            boid.sprite.getPosition().y -
+            boid.sprite.getGlobalBounds().size.y / 2.f
             <= margin
-            && pos == 3
+            && boid.pos == 3
         )
         {
-            pos = 0;
-            sprite.rotate(sf::degrees(90));
+            boid.pos = 0;
+            boid.sprite.rotate(sf::degrees(90));
 
-            xMovement = 0.05f;
-            yMovement = 0.0f;
+            boid.xMovement = 0.05f;
+            boid.yMovement = 0.0f;
         }
 
         window.clear(sf::Color::White);
-        window.draw(sprite);
+        window.draw(boid.sprite);
         window.display();
     }
 
